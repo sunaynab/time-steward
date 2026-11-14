@@ -1,0 +1,29 @@
+{
+  "name": "time-steward-mcp",
+  "version": "0.1.0",
+  "description": "Time Steward: MCP server for weekly time goals and logging",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "tsx test/smoke.ts"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@mastra/core": "^1.83.0",
+    "@mastra/mcp": "^2.9.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "type": "module",
+  "bin": {
+    "time-steward-mcp": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  }
+}
