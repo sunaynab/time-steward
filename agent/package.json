@@ -1,0 +1,33 @@
+{
+  "name": "time-steward-agent",
+  "version": "0.1.0",
+  "description": "Time Steward agent: Mastra agent over the time-log MCP server and Google Calendar",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "dev": "tsx src/cli.ts",
+    "checkin": "node dist/cli.js /checkin",
+    "plan": "node dist/cli.js /plan",
+    "test": "tsx test/wiring.ts"
+  },
+  "dependencies": {
+    "@cocal/google-calendar-mcp": "^2.8.1",
+    "@mastra/core": "^1.83.0",
+    "@mastra/libsql": "^1.30.0",
+    "@mastra/mcp": "^2.9.0",
+    "@mastra/memory": "^1.41.1",
+    "dotenv": "^18.0.10",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "ai": "^7.0.173",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.13"
+  }
+}
