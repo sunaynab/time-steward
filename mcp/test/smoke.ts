@@ -40,9 +40,6 @@ try {
       { category: "tv", target_minutes_per_week: 300, kind: "at_most" },
     ],
   });
-  const goals = await call(tools, "get_goals", {});
-  assert.equal(goals.goals.length, 3);
-  assert.ok(goals.goals.some((g: any) => g.category === "side_project"), "category normalized");
 
   await call(tools, "log_time", { category: "sleep", minutes: 480 });
   await call(tools, "log_time", { category: "TV", minutes: 400, note: "movie night" });

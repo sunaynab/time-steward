@@ -9,7 +9,10 @@
     "checkin": "node dist/cli.js /checkin",
     "plan": "node dist/cli.js /plan",
     "test": "tsx test/wiring.ts",
-    "playground": "mastra dev"
+    "playground": "mastra dev",
+    "eval": "tsx evals/run.ts",
+    "eval:selftest": "tsx evals/selftest.ts good && tsx evals/selftest.ts bad",
+    "typecheck": "tsc -p tsconfig.evals.json"
   },
   "dependencies": {
     "@cocal/google-calendar-mcp": "^2.8.1",

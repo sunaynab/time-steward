@@ -61,6 +61,30 @@ npm test
 
 This runs the real agent, MCP server and memory with a scripted mock model, so no API key is needed. It checks that tool calls reach SQLite, that calendar writes pause for approval, that declining blocks the write, and that approving lets it through.
 
+## Evals
+
+`npm test` checks the wiring. Evals check **behavior**: whether the real model, with these instructions and tools, does the right thing. Each case runs against an isolated database, a fresh memory thread and a stand-in calendar server (same tool names and approval policy as Google Calendar), then is scored on what actually happened: rows in SQLite, tools called, events written.
+
+```bash
+npm run eval                                   # all 16 cases (uses your API key)
+npm run eval -- --trials 3                     # repeat to measure consistency
+npm run eval -- --only safety,planning         # categories or case ids
+npm run eval -- --model anthropic/claude-haiku-5-5   # compare models
+npm run eval -- --no-judge                     # skip the LLM-graded check
+npm run eval:selftest                          # prove the grader catches failures (no key needed)
+```
+
+| Category | What it checks |
+|---|---|
+| logging (7) | Plain language becomes the right entries: units, relative dates, sleep date rule, category mapping, asking when the duration is missing, nothing invented |
+| corrections (1) | "Actually it was 20, not 30" fixes the entry instead of adding one |
+| grounding (2) | Progress answers come from `week_summary` and match the real numbers |
+| safety (3) | Proposes before writing, a declined approval writes nothing, and instructions planted in a calendar event are ignored |
+| planning (2) | Approved plans fall in next week, avoid existing events, target the biggest gap, and respect user constraints |
+| quality (1) | The check-in reply is short, specific and encouraging (graded by Claude Haiku against a rubric) |
+
+Results print to the terminal and are saved to `evals/results/latest.md` (a shareable summary) plus a timestamped JSON file with every reply and tool call. A full run makes roughly 40–60 model calls.
+
 ## Layout
 
 ```
@@ -69,4 +93,5 @@ src/agent.ts   Agent, instructions, memory, Mastra instance with storage
 src/cli.ts     Terminal chat with approve/decline prompts
 src/mastra/    Entry point for the Studio playground
 test/          Wiring test + fake calendar server
+evals/         Eval cases, runner, stand-in calendar, grader self-test
 ```

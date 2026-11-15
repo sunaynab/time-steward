@@ -37,18 +37,6 @@ export const setGoals = createTool({
   },
 });
 
-export const getGoals = createTool({
-  id: "get_goals",
-  description: "List all current weekly goals with their targets.",
-  inputSchema: z.object({}),
-  execute: async () => {
-    const rows = db
-      .prepare("SELECT category, target_minutes, kind, note FROM goals ORDER BY category")
-      .all();
-    return { goals: rows };
-  },
-});
-
 export const removeGoal = createTool({
   id: "remove_goal",
   description: "Stop tracking a goal category. Past log entries are kept.",
@@ -192,7 +180,6 @@ export const weekSummary = createTool({
 
 export const allTools = {
   set_goals: setGoals,
-  get_goals: getGoals,
   remove_goal: removeGoal,
   log_time: logTime,
   list_logs: listLogs,

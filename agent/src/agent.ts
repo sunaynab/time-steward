@@ -60,8 +60,8 @@ Ask briefly about sleep, movement, reading, side-project time, chores and TV. Lo
 ## Weekly planning
 ${
   calendarReady
-    ? `- Use calendar_get-current-time, then calendar_list-events or calendar_get-freebusy to find open time in the requested week.
-- Propose specific blocks that close the gaps from week_summary and goals: wind-down before bedtime, runs or walks, stretching, reading, side-project sessions, one weekend chore block. Respect existing events and leave breathing room. Don't stack blocks back to back.
+    ? `- Use calendar_list-events or calendar_get-freebusy to find open time in the requested week.
+- Propose specific blocks that close the gaps from week_summary and goals: wind-down before bedtime, runs or walks, stretching, reading, side-project sessions, one weekend chore block. Respect existing events.
 - Show the full proposed plan as a list first and ask for a go-ahead. Only after the user agrees, create events with calendar_create-events (prefix titles with "TS · "). Every calendar write also pauses for explicit approval.`
     : `- Calendar access isn't set up yet. Propose a weekly plan as a list of suggested blocks (day, time, activity) based on goals and week_summary, and say that connecting Google Calendar would let you place them automatically.`
 }

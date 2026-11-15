@@ -1,14 +1,30 @@
 import { MCPClient } from "@mastra/mcp";
 import { createRequire } from "node:module";
+import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
-const here = dirname(fileURLToPath(import.meta.url));
-// agent/src (or agent/dist) -> repo root -> mcp/dist/index.js
-const STEWARD_SERVER = resolve(here, "../../mcp/dist/index.js");
+// Find the agent/ folder. The terminal app runs from dist/, but the playground bundles
+// this file into agent/.mastra/output/, so walk up from both this file and the cwd.
+function findAgentRoot(): string {
+  const starts = [dirname(fileURLToPath(import.meta.url)), process.cwd()];
+  for (let dir of starts) {
+    while (true) {
+      if (existsSync(join(dir, "package.json")) && existsSync(join(dir, "..", "mcp", "package.json"))) return dir;
+      const parent = dirname(dir);
+      if (parent === dir) break;
+      dir = parent;
+    }
+  }
+  throw new Error("Couldn't find the time-steward agent folder (expected a sibling mcp/ folder).");
+}
+const AGENT_ROOT = findAgentRoot();
+const STEWARD_SERVER = resolve(AGENT_ROOT, "../mcp/dist/index.js");
 // Installed as a dependency, so startup doesn't download it through npx every time.
-const CALENDAR_SERVER = createRequire(import.meta.url).resolve("@cocal/google-calendar-mcp/build/index.js");
+const CALENDAR_SERVER = createRequire(join(AGENT_ROOT, "package.json")).resolve(
+  "@cocal/google-calendar-mcp/build/index.js",
+);
 
 // .env files don't expand "~", so do it here.
 if (process.env.GOOGLE_OAUTH_CREDENTIALS?.startsWith("~/")) {
@@ -27,7 +43,10 @@ const CALENDAR_WRITES = new Set([
 export const calendarApproval = ({ toolName }: { toolName: string }) =>
   CALENDAR_WRITES.has(toolName.replace(/^calendar_/, ""));
 
-export const calendarEnabled = Boolean(process.env.GOOGLE_OAUTH_CREDENTIALS);
+// Evals point this at a stand-in calendar server; normally unset.
+const CALENDAR_OVERRIDE = process.env.TIME_STEWARD_CALENDAR_SERVER;
+
+export const calendarEnabled = Boolean(process.env.GOOGLE_OAUTH_CREDENTIALS || CALENDAR_OVERRIDE);
 
 // Stdio servers only inherit PATH/HOME from this process, so pass what they need explicitly.
 const passEnv = (...keys: string[]) =>
@@ -45,7 +64,9 @@ export const mcp = new MCPClient({
       ? {
           calendar: {
             command: process.execPath,
-            args: [CALENDAR_SERVER],
+            args: CALENDAR_OVERRIDE
+              ? [...(CALENDAR_OVERRIDE.endsWith(".ts") ? ["--import", "tsx"] : []), CALENDAR_OVERRIDE]
+              : [CALENDAR_SERVER],
             env: passEnv("GOOGLE_OAUTH_CREDENTIALS", "HOME"),
             requireToolApproval: calendarApproval,
           },

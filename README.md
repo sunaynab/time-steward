@@ -35,7 +35,7 @@ flowchart LR
     llm["Claude<br/>Anthropic API"]
 
     subgraph servers["MCP servers · stdio"]
-        steward["Time Steward server<br/>mcp/ · 7 tools"]
+        steward["Time Steward server<br/>mcp/ · 6 tools"]
         calendar["Google Calendar server<br/>reads free · writes approved"]
     end
 
@@ -57,7 +57,7 @@ flowchart LR
 
 | Piece | What it does |
 |---|---|
-| **`mcp/`**: Time Steward MCP server | My own MCP server. It exposes `set_goals`, `get_goals`, `remove_goal`, `log_time`, `list_logs`, `delete_log` and `week_summary` over stdio, backed by SQLite. Any MCP client can use it, including Claude Desktop. |
+| **`mcp/`**: Time Steward MCP server | My own MCP server. It exposes `set_goals`, `remove_goal`, `log_time`, `list_logs`, `delete_log` and `week_summary` over stdio, backed by SQLite. Any MCP client can use it, including Claude Desktop. |
 | **`agent/`**: Mastra agent | Connects to both MCP servers, decides which tools to call, and keeps conversation memory plus durable notes about my routine. |
 | **Google Calendar MCP server** | Third-party server ([nspady/google-calendar-mcp](https://github.com/nspady/google-calendar-mcp)). Reading events and free/busy runs freely. Creating, updating or deleting events always pauses for approval. |
 | **Interfaces** | A terminal chat with y/n approval prompts, and Mastra Studio for a web chat with Approve/Decline buttons and step-by-step traces. |

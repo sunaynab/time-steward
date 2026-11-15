@@ -7,7 +7,6 @@ An MCP server (built with [Mastra](https://mastra.ai)) that stores weekly time g
 | Tool | What it does |
 |---|---|
 | `set_goals` | Create/update weekly goals: category, minutes per week, `at_least` or `at_most` (caps like TV) |
-| `get_goals` | List current goals |
 | `remove_goal` | Stop tracking a category (keeps past logs) |
 | `log_time` | Record minutes spent on a category (defaults to today) |
 | `list_logs` | Show entries for a date range, with ids |
