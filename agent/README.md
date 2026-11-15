@@ -26,6 +26,14 @@ npm run checkin     # jump straight into the nightly check-in
 npm run plan        # plan next week
 ```
 
+### Playground (web chat)
+
+```bash
+npm run playground
+```
+
+Then open http://localhost:4111/agents/time-steward/chat. Mastra Studio shows each tool call as it happens, and calendar writes appear with **Approve** / **Decline** buttons. It uses the same tools, memory and data as the terminal app. Studio's **Traces** tab shows what the agent did step by step, which is handy when it picks the wrong tool. Only one playground can run at a time; stop it with Ctrl+C in its Terminal window.
+
 First run: tell it your goals, e.g. *"Set my goals: 8.5h sleep a night, 3 x 30-min runs, 20 min stretching daily, 3h non-fiction reading, 5h side project, a 3h chore block, and at most 5h of TV."*
 
 Memory and paused approvals live in `~/.time-steward/agent.db`; your time log is in `~/.time-steward/time-steward.db`.
@@ -59,5 +67,6 @@ This runs the real agent, MCP server and memory with a scripted mock model, so n
 src/mcp.ts     MCPClient: steward server + optional calendar, approval policy
 src/agent.ts   Agent, instructions, memory, Mastra instance with storage
 src/cli.ts     Terminal chat with approve/decline prompts
+src/mastra/    Entry point for the Studio playground
 test/          Wiring test + fake calendar server
 ```

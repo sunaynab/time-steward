@@ -8,7 +8,8 @@
     "dev": "tsx src/cli.ts",
     "checkin": "node dist/cli.js /checkin",
     "plan": "node dist/cli.js /plan",
-    "test": "tsx test/wiring.ts"
+    "test": "tsx test/wiring.ts",
+    "playground": "mastra dev"
   },
   "dependencies": {
     "@cocal/google-calendar-mcp": "^2.8.1",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@types/node": "^26.6.6",
     "ai": "^7.0.173",
+    "mastra": "^1.39.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
