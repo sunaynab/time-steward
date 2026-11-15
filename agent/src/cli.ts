@@ -5,6 +5,7 @@ import { stdin as input, stdout as output } from "node:process";
 
 const { agent, calendarReady } = await import("./agent.js");
 const { mcp, calendarEnabled } = await import("./mcp.js");
+const { printToolTrace, describeCall } = await import("./trace.js");
 
 const rl = readline.createInterface({ input, output });
 const memory = { resource: "me", thread: "time-steward" };
@@ -15,18 +16,9 @@ const SHORTCUTS: Record<string, string> = {
   "/summary": "How am I doing this week?",
 };
 
-function describeCall(payload: any) {
-  const name = String(payload?.toolName ?? "a tool").replace(/^calendar_/, "");
-  const args = payload?.args ?? {};
-  const events = Array.isArray(args.events) ? args.events : [args];
-  const lines = events.map(
-    (e: any) => `   • ${e.summary ?? e.eventId ?? "(event)"}  ${e.start ?? ""}${e.end ? ` → ${e.end}` : ""}`,
-  );
-  return `\nTime Steward wants to run ${name}:\n${lines.join("\n")}`;
-}
-
 async function send(text: string) {
   let result: any = await agent.generate(text, { memory });
+  printToolTrace(result);
 
   // Calendar writes pause here until you approve or decline.
   while (result.finishReason === "suspended") {
@@ -38,6 +30,7 @@ async function send(text: string) {
       answer === "y" || answer === "yes"
         ? await agent.approveToolCallGenerate(opts)
         : await agent.declineToolCallGenerate({ ...opts, reason: "The user declined this change." });
+    printToolTrace(result);
   }
   console.log(`\n${result.text}\n`);
 }

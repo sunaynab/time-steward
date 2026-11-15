@@ -9,6 +9,12 @@ I set weekly goals (8.5 hours of sleep a night, runs, stretching, non-fiction re
 
 Built with **TypeScript**, **[Mastra](https://mastra.ai)**, the **Model Context Protocol (MCP)**, **Claude**, and **SQLite**.
 
+<p align="center">
+  <img src="assets/demo.gif" alt="Terminal demo: a nightly check-in logs four activities and summarizes the week, then the agent plans next week and pauses for approval before adding five events to the calendar" width="800" />
+</p>
+
+<sub>A nightly check-in, then planning next week with the approval step. Tool calls, data and the approval flow are real; the agent's wording in this recording is scripted.</sub>
+
 ## Architecture
 
 ```mermaid
