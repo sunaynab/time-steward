@@ -1,4 +1,7 @@
-# Time Steward
+<h1>
+  <img src="assets/logo.png" alt="Project Logo" width="32" height="32" align="center" />
+  Time Steward
+</h1>
 
 A personal AI agent that plans my week around what matters to me, then checks in each night on how it actually went.
 
